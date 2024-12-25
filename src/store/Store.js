@@ -1,25 +1,20 @@
-import { configureStore } from '@reduxjs/toolkit';
-import userReducer from '../features/user/userSlice';
-import courseReducer from "../features/course/CourseSlice";
-import moduleReducer from "../features/module/ModuleSlice"
-import UserProfileReducer from '../features/userProfile/UserProfile';
-import QuestionsReducer from '../features/questionsSlice/QuestionsSlice';
-import teacherReducer from "../features/teacher/teacherSlice";
-import teacherProfileSlice from '../features/teacherProfile/teacherProfileSlice';
-import enrolledStudentsReducer from "../features/student/enrolledStudentsSlice";
-import studentReducer from "../features/student/studentSlice"
-export const store = configureStore({
-    reducer: {
-        user: userReducer,
-        courses: courseReducer,
-        modules: moduleReducer,
-        userProfile: UserProfileReducer,
-        Question: QuestionsReducer,
-        teacher: teacherReducer,
-        teacherProfile: teacherProfileSlice,
-        enrolledStudents: enrolledStudentsReducer,
-        student: studentReducer,
+import { configureStore } from "@reduxjs/toolkit";
+import studentAuthReducer from "../features/studentPortal/StudentAuthSlice";
+import studentCoursesReducer from "../features/studentPortal/StudentCoursesSlice";
+import studentModulesReducer from "../features/studentPortal/StudentModulesSlice";
+import moduleDetailReducer from "../features/studentPortal/StudentModuleDetailSlice";
+import compilerReducer from "../features/compiler/compilerSlice";
 
+const store = configureStore({
+    reducer: {
+        studentAuth: studentAuthReducer,
+        // ...other slices    
+        studentCourses: studentCoursesReducer,
+        studentModules: studentModulesReducer,
+        moduleDetail: moduleDetailReducer,
+        compiler: compilerReducer,
 
     },
 });
+
+export { store }

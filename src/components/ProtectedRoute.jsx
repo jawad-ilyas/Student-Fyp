@@ -1,20 +1,17 @@
 import { Navigate } from "react-router-dom";
 
-const ProtectedRoute = ({ children }) => {
-    const userInfo = JSON.parse(localStorage.getItem("userInfo")); // Retrieve user info from localStorage
+function ProtectedRoute({ children }) {
+    // read from localStorage
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
-    // Check if user is logged in
-    if (!userInfo || !userInfo.data) {
-        return <Navigate to="/login" />;
+    if (!userInfo) {
+        // not logged in
+        return <Navigate to="/login" replace />;
     }
 
-    // Check if the user's role is "admin"
-    if (userInfo.data.role !== "admin") {
-        return <Navigate to="/login" />;
-    }
-
-    // If authenticated and has "admin" role, render the child component
+    // or if userInfo.role !== "student", 
+    // you might do additional checks for student role
     return children;
-};
+}
 
 export default ProtectedRoute;

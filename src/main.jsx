@@ -3,30 +3,21 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 
 import { Provider } from 'react-redux';
-import { store } from './store/Store.js';
+import { store } from './store/store.js';
 import { RouterProvider } from 'react-router-dom';
 import { createBrowserRouter } from 'react-router-dom';
 import App from '../src/App';
 
 
 import Home from '../src/pages/Home';
-import Register from '../src/pages/Register';
-import Login from '../src/pages/Login.jsx';
-import Dashboard from './pages/Dashboard.jsx';
-import CourseModules from './pages/CourseModules.jsx';
-import ProtectedRoute from './components/ProtectedRoute'; // Import the ProtectedRoute component
-import ProfilePage from './pages/ProfilePage.jsx';
-import QuestionsDashboard from './pages/QuestionsDashboard.jsx';
-import AddQuestion from './pages/AddQuestion.jsx';
-import ShowQuestion from './pages/ShowQuestion.jsx';
-import TeacherManagement from './pages/TeacherManagement.jsx';
-import TeacherProfile from './pages/TeacherProfile.jsx';
-import ShowEnrolledStudents from './pages/ShowEnrolledStudents.jsx';
-import StudentProfile from './pages/StudentProfile.jsx';
-import AddQuestionsIntoModule from './pages/AddQuestionsIntoModule.jsx';
-import ViewModuleQuestions from './pages/ViewModuleQuestions.jsx';
+
 import AboutUs from './pages/AboutUs.jsx';
 import Resources from './pages/Resources.jsx';
+import StudentLogin from './pages/StudentLogin.jsx';
+import StudentDashboard from './pages/StudentDashboard.jsx';
+import CourseModules from './pages/CourseModules.jsx';
+import ModuleDetail from './pages/ModuleDetail.jsx';
+
 
 const router = createBrowserRouter([
   {
@@ -37,121 +28,46 @@ const router = createBrowserRouter([
         path: "",
         element: <Home />,
       },
+      // {
+      //   path: 'register',
+      //   element: <Register />,
+      // },
+
       {
-        path: 'register',
-        element: <Register />,
+        path: 'aboutus',
+        element: <AboutUs />,
       },
       {
-        path: 'login',
-        element: <Login />,
+        path: 'resources',
+        element: <Resources />,
+      },
+      {
+        path: "/login", element: < StudentLogin />
+
       },
       {
         path: 'dashboard',
         element: (
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
+          <>
+            <StudentDashboard />
+          </>
         ),
       },
       {
-        path: 'courses/:courseId',
+        path: 'coursemodules/:courseId',
         element: (
-          <ProtectedRoute>
+          <>
             <CourseModules />
-          </ProtectedRoute>
+          </>
         ),
       },
       {
-        path: 'profile',
+        path: '/modules/:moduleId',
         element: (
-          <ProtectedRoute>
-            <ProfilePage />
-          </ProtectedRoute>
+          <>
+            <ModuleDetail />
+          </>
         ),
-      },
-
-      {
-        path: 'questionsdashboard',
-        element: (
-          <ProtectedRoute>
-            <QuestionsDashboard />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: 'addquestion',
-        element: (
-          <ProtectedRoute>
-            <AddQuestion />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: 'question/:id',
-        element: (
-          <ProtectedRoute>
-            <ShowQuestion />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: 'teacherdashboard',
-        element: (
-          <ProtectedRoute>
-            <TeacherManagement />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: 'teachers/:teacherId',
-        element: (
-          <ProtectedRoute>
-            <TeacherProfile />
-          </ProtectedRoute>
-        ),
-      },
-      {
-
-        path: '/courses/:courseId/enrolled-students',
-        element: (
-          <ProtectedRoute>
-            <ShowEnrolledStudents />
-          </ProtectedRoute>
-        ),
-      },
-      {
-
-
-        path: '/course/:courseId/students/:studentId',
-        element: (
-          <ProtectedRoute>
-            <StudentProfile />
-          </ProtectedRoute>
-        ),
-      },
-      {
-
-        path: "/addquestionsintomodule/:courseId/:moduleId",
-        element: (< AddQuestionsIntoModule />)
-
-      },
-      {
-
-        path: "/courses/:courseId/modules/:moduleId",
-        element: (< ViewModuleQuestions />)
-
-      },
-      {
-
-        path: "aboutus",
-        element: (< AboutUs />)
-
-      },
-      {
-
-        path: "resources",
-        element: (< Resources />)
-
       },
 
     ],

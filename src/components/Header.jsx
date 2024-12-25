@@ -12,6 +12,7 @@ const Header = () => {
         navigate("/login");
     };
 
+ 
     return (
         <header className="flex justify-between items-center p-4 border-b shadow-sm relative">
             <h1 className="text-2xl font-bold text-gray-800">Logo</h1>
