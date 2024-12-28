@@ -209,19 +209,13 @@ function ModuleDetail() {
                         <DocumentArrowDownIcon className="w-4 h-4 mr-1" />
                         Download PDF
                     </button>
-                    <button
-                        onClick={() => handleDownload("docx")}
-                        className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-500 flex items-center"
-                    >
-                        <DocumentArrowDownIcon className="w-4 h-4 mr-1" />
-                        Download DOCX
-                    </button>
+                   
                 </div>
             </div>
 
             {/* Questions */}
             {module.questions?.map((qObj, index) => {
-                const { _id, title, problemStatement, testCases } = qObj.question;
+                const { _id, title, problemStatement, sampleTestCases } = qObj.question;
                 const codeValue = solutions[index]?.code || "";
                 const outputValue = solutions[index]?.output || "";
 
@@ -237,7 +231,7 @@ function ModuleDetail() {
                         )}
 
                         {/* Show test cases if they exist */}
-                        {testCases && testCases.length > 0 && (
+                        {sampleTestCases && sampleTestCases.length > 0 && (
                             <div className="mt-2">
                                 <button
                                     onClick={() => setShowTestCases((prev) => !prev)}
@@ -247,10 +241,10 @@ function ModuleDetail() {
                                 </button>
                                 {showTestCases && (
                                     <ul className="mt-2 bg-gray-700 p-2 rounded text-xs text-gray-200">
-                                        {testCases.map((tc, i) => (
+                                        {sampleTestCases.map((tc, i) => (
                                             <li key={i} className="mb-1">
                                                 <span className="font-semibold">Input:</span> {tc.input} |
-                                                <span className="font-semibold"> Expected:</span> {tc.expected}
+                                                <span className="font-semibold"> Output:</span> {tc.output}
                                             </li>
                                         ))}
                                     </ul>

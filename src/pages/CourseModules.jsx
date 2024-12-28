@@ -30,8 +30,8 @@ function CourseModules() {
         <div className="min-h-screen bg-gray-900 text-gray-200 font-mono">
             {/* A "banner" for the course */}
             <div className="bg-green-700 px-6 py-4">
-                <h1 className="text-2xl font-bold">Course Title Goes Here</h1>
-                <p className="text-sm text-gray-100">A brief description or tagline for the course can go here.</p>
+                <h1 className="text-2xl font-bold">{modules[0]?.course?.name || "Course Name Unavailable"}</h1>
+                <p className="text-sm text-gray-100">{modules[0]?.course?.description || "Course Description Unavailable"}</p>
                 <button
                     onClick={() => navigate(-1)}
                     className="mt-3 px-3 py-1 bg-gray-100 text-gray-800 rounded hover:bg-gray-200"
@@ -81,6 +81,7 @@ function CourseModules() {
                                 <div className="bg-gray-900 px-4 py-3 border-b border-gray-700">
                                     <h3 className="text-lg font-bold text-green-300 tracking-wide">
                                         {mod.title}
+
                                     </h3>
                                 </div>
 
@@ -111,7 +112,7 @@ function CourseModules() {
                                             className="px-3 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-500 transition"
                                             onClick={() => navigate(`/modules/${mod._id}`)}
                                         >
-                                            View Module
+                                            View Questions
                                         </button>
                                     </div>
                                 </div>
