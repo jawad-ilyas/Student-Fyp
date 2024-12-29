@@ -15,7 +15,7 @@ export const fetchStudentStats = createAsyncThunk(
                 },
             };
             const response = await axios.get(
-                `http://localhost:5000/api/v1/students/${studentId}/stats`,
+                `http://localhost:5000/api/v1/students/${studentInfo?._id}/stats`,
                 config
             );
             return response.data.data; // { totalSolved, easyCount, mediumCount, hardCount, totalQuestions }

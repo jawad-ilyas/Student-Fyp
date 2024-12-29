@@ -133,7 +133,11 @@ function ModuleDetail() {
             alert("Cannot submit solutions: time window has passed or not started.");
             return;
         }
-        dispatch(submitSubmission({ moduleId, solutions }));
+        console.log(module?.course)
+        const courseId = module?.course;
+        console.log(module?.teacher?._id)
+        const teacherId = module?.teacher?._id;
+        dispatch(submitSubmission({ courseId, teacherId, moduleId, solutions }));
     };
 
     const handleDownload = (format) => {

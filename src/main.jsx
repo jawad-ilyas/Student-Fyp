@@ -18,6 +18,7 @@ import StudentDashboard from './pages/StudentDashboard.jsx';
 import CourseModules from './pages/CourseModules.jsx';
 import ModuleDetail from './pages/ModuleDetail.jsx';
 import StudentQuestionsPage from './pages/StudentQuestionsPage.jsx';
+import CourseSubmissions from './pages/CourseSubmissions.jsx';
 
 
 const router = createBrowserRouter([
@@ -78,7 +79,18 @@ const router = createBrowserRouter([
           </>
         ),
       },
-    
+      {
+        path: "/courses/:courseId/submissions",
+        element: (
+          <>
+            <CourseSubmissions />
+          </>
+        )
+
+
+
+      },
+
 
 
     ],

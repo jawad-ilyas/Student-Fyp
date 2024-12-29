@@ -93,6 +93,12 @@ function StudentDashboard() {
                                 >
                                     View Course
                                 </button>
+                                <button
+                                    onClick={() => navigate(`/courses/${course._id}/submissions`)}
+                                    className="mt-2 w-full px-3 py-2 bg-red-600 text-black rounded hover:bg-red-500 transition"
+                                >
+                                   Check Result 
+                                </button>
                             </div>
                         </div>
                     ))

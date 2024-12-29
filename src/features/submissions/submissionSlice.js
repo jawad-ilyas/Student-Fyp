@@ -7,7 +7,7 @@ const API_URL = "http://localhost:5000/api/v1/submissions";
 // POST /api/v1/submissions/:moduleId
 export const submitSubmission = createAsyncThunk(
     "submissions/submitSubmission",
-    async ({ moduleId, solutions }, { rejectWithValue }) => {
+    async ({ courseId, teacherId, moduleId, solutions }, { rejectWithValue }) => {
         try {
             const studentInfo = JSON.parse(localStorage.getItem("studentInfo"));
             const config = {
@@ -17,11 +17,12 @@ export const submitSubmission = createAsyncThunk(
             };
 
             const payload = {
+                courseId, teacherId,
                 moduleId,
                 solutions, // Array of question submissions
             };
 
-            const response = await axios.post(`${API_URL}/${moduleId}/submit`, payload, config);
+            const response = await axios.post(`${API_URL}/${studentInfo?._id}/submit`, payload, config);
             return response.data; // Backend response
         } catch (error) {
             return rejectWithValue(error.response?.data || "Failed to submit module");
@@ -47,7 +48,28 @@ export const fetchSubmissionDetails = createAsyncThunk(
         }
     }
 );
+// src/features/submissions/submissionSlice.js
+export const fetchSubmissionsByCourse = createAsyncThunk(
+    "submissions/fetchSubmissionsByCourse",
+    async (courseId, { rejectWithValue }) => {
+        try {
+            const studentInfo = JSON.parse(localStorage.getItem("studentInfo"));
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${studentInfo?.token}`,
+                },
+            };
 
+            const response = await axios.get(
+                `http://localhost:5000/api/v1/submissions/course/${courseId}`,
+                config
+            );
+            return response.data.data; // Submissions array
+        } catch (error) {
+            return rejectWithValue(error.response?.data || "Failed to fetch submissions.");
+        }
+    }
+);
 const submissionSlice = createSlice({
     name: "submissions",
     initialState: {
@@ -91,6 +113,18 @@ const submissionSlice = createSlice({
                 state.submission = action.payload;
             })
             .addCase(fetchSubmissionDetails.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+            .addCase(fetchSubmissionsByCourse.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(fetchSubmissionsByCourse.fulfilled, (state, action) => {
+                state.loading = false;
+                state.submissions = action.payload;
+            })
+            .addCase(fetchSubmissionsByCourse.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             });
