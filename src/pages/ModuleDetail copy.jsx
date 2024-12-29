@@ -11,8 +11,11 @@ import {
     CodeBracketIcon,
 } from "@heroicons/react/24/outline";
 
-import { fetchSingleModule } from "../features/studentPortal/StudentModuleDetailSlice";
-import { submitSubmission, clearSubmissionState } from "../features/submissions/submissionSlice";
+import {
+    fetchSingleModule,
+    submitModule,
+    clearSubmitState,
+} from "../features/studentPortal/StudentModuleDetailSlice";
 import { runCode } from "../features/compiler/compilerSlice";
 
 function ModuleDetail() {
@@ -24,24 +27,23 @@ function ModuleDetail() {
         module,
         loading,
         error,
+        submitLoading,
+        submitError,
+        submitSuccess,
     } = useSelector((state) => state.moduleDetail);
-
-    const {
-        loading: submissionLoading,
-        error: submissionError,
-        success: submissionSuccess,
-    } = useSelector((state) => state.submission);
 
     const { runLoading } = useSelector((state) => state.compiler);
 
-    // Local state for solutions
+    // local solutions state
     const [solutions, setSolutions] = useState([]);
+
+    // Show/hide test cases
     const [showTestCases, setShowTestCases] = useState(false);
 
     useEffect(() => {
         dispatch(fetchSingleModule(moduleId));
         return () => {
-            dispatch(clearSubmissionState());
+            dispatch(clearSubmitState());
         };
     }, [dispatch, moduleId]);
 
@@ -57,6 +59,7 @@ function ModuleDetail() {
         }
     }, [module]);
 
+    // Time-bound checks
     const now = new Date();
     let timeStatus = "Closed";
     let timeRemainingLabel = "";
@@ -66,32 +69,37 @@ function ModuleDetail() {
 
         if (now < start) {
             timeStatus = "Locked";
-            timeRemainingLabel = `Starts in ${formatTimeDiff(now, start)}`;
+            timeRemainingLabel = formatTimeDiff(now, start, "Starts in");
         } else if (now > end) {
             timeStatus = "Closed";
-            timeRemainingLabel = `Ended on ${end.toLocaleString()}`;
+            timeRemainingLabel = "Ended on " + end.toLocaleString();
         } else {
             timeStatus = "Open";
-            timeRemainingLabel = `Ends in ${formatTimeDiff(now, end)}`;
+            timeRemainingLabel = formatTimeDiff(now, end, "Ends in");
         }
     }
 
     const isWithinTime = timeStatus === "Open";
 
-    function formatTimeDiff(from, to) {
+    // Helper: format the time difference between two dates
+    function formatTimeDiff(from, to, prefix) {
         const diffMs = to - from;
         if (diffMs <= 0) return "";
         const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
         const diffHours = Math.floor((diffMs / (1000 * 60 * 60)) % 24);
         const diffMinutes = Math.floor((diffMs / (1000 * 60)) % 60);
+        const diffSecs = Math.floor((diffMs / 1000) % 60);
 
         let str = "";
         if (diffDays) str += `${diffDays}d `;
         if (diffHours) str += `${diffHours}h `;
         if (diffMinutes) str += `${diffMinutes}m `;
-        return str.trim();
+        if (!diffDays && !diffHours && !diffMinutes) str += `${diffSecs}s`;
+
+        return `${prefix} ${str} `;
     }
 
+    // Update code/text solutions
     const handleSolutionChange = (index, field, value) => {
         setSolutions((prev) => {
             const copy = [...prev];
@@ -107,6 +115,8 @@ function ModuleDetail() {
         }
 
         const questionId = solutions[index].questionId;
+        // If question has testCases, pass them:
+       
         const languageToUse = "cpp17";
         const codeToRun = solutions[index].code;
         const testCases = module.questions[index].question.testCases || [];
@@ -133,7 +143,7 @@ function ModuleDetail() {
             alert("Cannot submit solutions: time window has passed or not started.");
             return;
         }
-        dispatch(submitSubmission({ moduleId, solutions }));
+        dispatch(submitModule({ moduleId, solutions }));
     };
 
     const handleDownload = (format) => {
@@ -164,19 +174,10 @@ function ModuleDetail() {
             </div>
         );
     }
-    if (error) {
-        return (
-            <div className="p-4 text-red-400 bg-gray-900 h-screen">
-                {/* Safely handle the error object */}
-                {typeof error === "string"
-                    ? error
-                    : error?.message || "An unexpected error occurred."}
-            </div>
-        );
-    }
 
     return (
         <div className="min-h-screen bg-gray-900 text-gray-200 p-6">
+            {/* Top Row: Back Button + Module Title */}
             <div className="flex items-center mb-6">
                 <button
                     onClick={() => window.history.back()}
@@ -188,6 +189,7 @@ function ModuleDetail() {
                 <h1 className="text-2xl font-bold text-green-400">{module.title}</h1>
             </div>
 
+            {/* Module Info Card */}
             <div className="bg-gray-800 rounded p-4 border border-gray-700 shadow mb-6">
                 <p className="text-sm text-gray-300">{module.description}</p>
                 <div className="flex items-center space-x-2 mt-3 text-xs text-gray-400">
@@ -207,9 +209,11 @@ function ModuleDetail() {
                         <DocumentArrowDownIcon className="w-4 h-4 mr-1" />
                         Download PDF
                     </button>
+                   
                 </div>
             </div>
 
+            {/* Questions */}
             {module.questions?.map((qObj, index) => {
                 const { _id, title, problemStatement, sampleTestCases } = qObj.question;
                 const codeValue = solutions[index]?.code || "";
@@ -220,11 +224,14 @@ function ModuleDetail() {
                         <h2 className="text-lg font-semibold text-green-300">
                             Question {index + 1}: {title}
                         </h2>
-                        {problemStatement && (
+                        {problemStatement ? (
                             <p className="text-sm text-gray-300 mt-1">{problemStatement}</p>
+                        ) : (
+                            <></> // If there's no statement, hide or show a small note
                         )}
 
-                        {sampleTestCases?.length > 0 && (
+                        {/* Show test cases if they exist */}
+                        {sampleTestCases && sampleTestCases.length > 0 && (
                             <div className="mt-2">
                                 <button
                                     onClick={() => setShowTestCases((prev) => !prev)}
@@ -245,6 +252,7 @@ function ModuleDetail() {
                             </div>
                         )}
 
+                        {/* Code Editor */}
                         <div className="mt-4">
                             <label className="block text-sm text-gray-400 mb-1 flex items-center">
                                 <CodeBracketIcon className="w-4 h-4 mr-1" />
@@ -264,6 +272,7 @@ function ModuleDetail() {
                                 />
                             </div>
 
+                            {/* "Run" button & output */}
                             <div className="mt-2 flex items-center space-x-2">
                                 <button
                                     className="px-2 py-1 bg-purple-600 text-white rounded hover:bg-purple-500"
@@ -275,12 +284,14 @@ function ModuleDetail() {
                                 <span className="text-xs text-gray-400">Test with sample cases</span>
                             </div>
 
+                            {/* Output area */}
                             {outputValue && (
                                 <pre className="mt-2 bg-gray-700 text-green-300 text-xs p-2 rounded h-20 overflow-auto">
                                     {outputValue}
                                 </pre>
                             )}
 
+                            {/* Optional text solution field */}
                             <label className="block text-sm text-gray-400 mt-4">
                                 Additional Comments / Explanation
                             </label>
@@ -295,18 +306,19 @@ function ModuleDetail() {
                 );
             })}
 
+            {/* Submit / Finalize */}
             <div className="mt-4">
-                {submissionSuccess && (
-                    <p className="text-green-400 text-sm mb-2">{submissionSuccess}</p>
+                {submitSuccess && (
+                    <p className="text-green-400 text-sm mb-2">{submitSuccess}</p>
                 )}
-                {submissionError && <p className="text-red-400 text-sm mb-2">{submissionError}</p>}
+                {submitError && <p className="text-red-400 text-sm mb-2">{submitError}</p>}
 
                 <button
                     onClick={handleSubmitAll}
                     className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-500 transition"
-                    disabled={!isWithinTime || submissionLoading}
+                    disabled={!isWithinTime || submitLoading}
                 >
-                    {submissionLoading ? "Submitting..." : "Submit All Solutions"}
+                    {submitLoading ? "Submitting..." : "Submit All Solutions"}
                 </button>
             </div>
         </div>

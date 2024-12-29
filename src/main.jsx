@@ -17,6 +17,7 @@ import StudentLogin from './pages/StudentLogin.jsx';
 import StudentDashboard from './pages/StudentDashboard.jsx';
 import CourseModules from './pages/CourseModules.jsx';
 import ModuleDetail from './pages/ModuleDetail.jsx';
+import StudentQuestionsPage from './pages/StudentQuestionsPage.jsx';
 
 
 const router = createBrowserRouter([
@@ -69,6 +70,16 @@ const router = createBrowserRouter([
           </>
         ),
       },
+      {
+        path: '/problems',
+        element: (
+          <>
+            <StudentQuestionsPage />
+          </>
+        ),
+      },
+    
+
 
     ],
   },
