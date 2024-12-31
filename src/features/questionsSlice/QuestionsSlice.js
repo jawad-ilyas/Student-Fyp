@@ -98,6 +98,8 @@ const questionsSlice = createSlice({
         questions: [],
         categories: [],
         tags: [],
+        singleQuestion: null, // <-- NEW FIELD for one question
+
         loading: false,
         error: null,
         successMessage: null,
@@ -192,13 +194,19 @@ const questionsSlice = createSlice({
                 state.categories = action.payload.categories;
                 state.tags = action.payload.tags;
             })
+
+
             // Fetch single question
             .addCase(fetchQuestionById.pending, (state) => {
                 state.loading = true;
+                state.error = null;
+                // optionally clear the old singleQuestion:
+                state.singleQuestion = null;
             })
             .addCase(fetchQuestionById.fulfilled, (state, action) => {
                 state.loading = false;
-                state.selectedQuestion = action.payload;
+                // The question data is action.payload
+                state.singleQuestion = action.payload;
             })
             .addCase(fetchQuestionById.rejected, (state, action) => {
                 state.loading = false;

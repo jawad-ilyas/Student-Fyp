@@ -19,7 +19,8 @@ import CourseModules from './pages/CourseModules.jsx';
 import ModuleDetail from './pages/ModuleDetail.jsx';
 import StudentQuestionsPage from './pages/StudentQuestionsPage.jsx';
 import CourseSubmissions from './pages/CourseSubmissions.jsx';
-
+import SingleQuestionDetail from './pages/SingleQuestionDetail.jsx';
+import CourseModulesResults from './pages/CourseModulesResults.jsx';
 
 const router = createBrowserRouter([
   {
@@ -64,6 +65,14 @@ const router = createBrowserRouter([
         ),
       },
       {
+        path: '/coursesresult/:courseId/',
+        element: (
+          <>
+            <CourseModulesResults />
+          </>
+        ),
+      },
+      {
         path: '/modules/:moduleId',
         element: (
           <>
@@ -80,15 +89,20 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/courses/:courseId/submissions",
+        path: "/courses/:courseId/module/:moduleId/submissions",
         element: (
           <>
             <CourseSubmissions />
           </>
         )
-
-
-
+      },
+      {
+        path: "/questions/:questionId",
+        element: (
+          <>
+            <SingleQuestionDetail />
+          </>
+        )
       },
 
 

@@ -51,9 +51,10 @@ export const fetchSubmissionDetails = createAsyncThunk(
 // src/features/submissions/submissionSlice.js
 export const fetchSubmissionsByCourse = createAsyncThunk(
     "submissions/fetchSubmissionsByCourse",
-    async (courseId, { rejectWithValue }) => {
+    async ({ courseId, moduleId }, { rejectWithValue }) => {
         try {
             const studentInfo = JSON.parse(localStorage.getItem("studentInfo"));
+            console.log("moduleId of the submission ", moduleId)
             const config = {
                 headers: {
                     Authorization: `Bearer ${studentInfo?.token}`,
@@ -61,7 +62,7 @@ export const fetchSubmissionsByCourse = createAsyncThunk(
             };
 
             const response = await axios.get(
-                `http://localhost:5000/api/v1/submissions/course/${courseId}`,
+                `http://localhost:5000/api/v1/submissions/course/${courseId}?moduleId=${moduleId}`,
                 config
             );
             return response.data.data; // Submissions array

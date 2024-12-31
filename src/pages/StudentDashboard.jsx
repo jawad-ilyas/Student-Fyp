@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchStudentCourses } from "../features/studentPortal/StudentCoursesSlice";
 import { useNavigate } from "react-router-dom";
+import Header from "../components/Header";
 
 function StudentDashboard() {
     const dispatch = useDispatch();
@@ -33,12 +34,7 @@ function StudentDashboard() {
     return (
         <div className="min-h-screen w-full bg-gray-900 text-gray-200 font-mono">
             {/* Header */}
-            <div className="px-6 py-4 bg-gray-800 shadow-md flex justify-between items-center">
-                <h1 className="text-xl font-bold text-green-400">
-                    My Courses
-                </h1>
-                {/* Optional Logout or Profile button if you want */}
-            </div>
+            <Header />
 
             {/* Courses Grid */}
             <div className="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -94,11 +90,17 @@ function StudentDashboard() {
                                     View Course
                                 </button>
                                 <button
+                                    onClick={() => navigate(`/coursesresult/${course._id}`)}
+                                    className="mt-2 w-full px-3 py-2 bg-green-600 text-white rounded hover:bg-green-500 transition"
+                                >
+                                    Check Result Of The Modules
+                                </button>
+                                {/* <button
                                     onClick={() => navigate(`/courses/${course._id}/submissions`)}
                                     className="mt-2 w-full px-3 py-2 bg-red-600 text-black rounded hover:bg-red-500 transition"
                                 >
-                                   Check Result 
-                                </button>
+                                    Check Result
+                                </button> */}
                             </div>
                         </div>
                     ))

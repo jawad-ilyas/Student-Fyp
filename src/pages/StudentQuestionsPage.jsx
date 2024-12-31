@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
-
+import { Link } from "react-router-dom";
 // We'll import the same thunks from questionsSlice—
 // or if you prefer separate calls, you can do that too.
 import {
@@ -72,12 +71,17 @@ function StudentQuestionsPage() {
     return (
         <div className="min-h-screen w-full bg-gray-900 text-gray-200 font-mono">
             {/* HEADER */}
+            {/* Back Button */}
             <div className="flex justify-between items-center px-6 py-4 bg-gray-800 shadow-md">
-                <h1 className="text-xl font-bold text-green-400">
-                    All Questions
-                </h1>
-                {/* If you want a “Stats” button or any other student-specific actions, place them here */}
+                <button
+                    onClick={() => navigate(-1)}
+                    className="px-4 py-2 bg-gray-700 text-gray-200 rounded hover:bg-gray-600 transition"
+                >
+                    &larr; Back
+                </button>
+                <h1 className="text-xl font-bold text-green-400">All Questions</h1>
             </div>
+
             {/* STATS PANEL */}
             <div className="px-6 py-4 bg-gray-800 border-b border-gray-700">
                 {statsLoading ? (
@@ -221,6 +225,7 @@ function StudentQuestionsPage() {
                         <table className="w-full table-auto border-collapse">
                             <thead>
                                 <tr className="bg-gray-700 text-gray-300 uppercase text-xs tracking-wider">
+                                    <th className="p-4 text-left font-medium">Index</th>
                                     <th className="p-4 text-left font-medium">Status</th>
                                     <th className="p-4 text-left font-medium">Title</th>
                                     <th className="p-4 text-left font-medium">Difficulty</th>
@@ -230,7 +235,7 @@ function StudentQuestionsPage() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {filteredQuestions.map((question) => {
+                                {filteredQuestions.map((question, index) => {
                                     const solved = isQuestionSolved(question._id);
 
                                     return (
@@ -238,6 +243,8 @@ function StudentQuestionsPage() {
                                             key={question._id}
                                             className="border-b border-gray-700 hover:bg-gray-800 transition"
                                         >
+                                            <td className="p-4 text-yellow-300">{index + 1}</td>
+
                                             {/* Show a “solved” or “unsolved” icon */}
                                             <td className="p-4 text-center">
                                                 {solved ? (
@@ -246,7 +253,15 @@ function StudentQuestionsPage() {
                                                     <span className="text-red-400">Unsolved</span>
                                                 )}
                                             </td>
-                                            <td className="p-4 text-green-200">{question.title}</td>
+                                            <td className="p-4 text-green-200">
+                                                {/* Link to admin question detail page */}
+                                                <Link
+                                                    to={`/questions/${question._id}`}
+                                                    className="hover:underline capitalize"
+                                                >
+                                                    {question.title}
+                                                </Link>
+                                            </td>
                                             <td className="p-4 text-yellow-300">{question.difficulty}</td>
                                             <td className="p-4 text-blue-300">{question.category}</td>
                                             <td className="p-4 text-purple-300">
@@ -255,16 +270,8 @@ function StudentQuestionsPage() {
                                             <td className="p-4">
                                                 {/* For students, typically a "View" or "Solve" button */}
                                                 <button
-                                                    className="
-                            px-3 py-1
-                            bg-green-600
-                            text-gray-100
-                            rounded
-                            mr-2
-                            hover:bg-green-500
-                            transition
-                          "
-                                                    onClick={() => navigate(`/question/${question._id}`)}
+                                                    className="px-3 py-1 bg-green-600 text-gray-100 rounded mr-2 hover:bg-green-500 transition"
+                                                    onClick={() => navigate(`/questions/${question._id}`)}
                                                 >
                                                     {solved ? "Review" : "Solve"}
                                                 </button>
