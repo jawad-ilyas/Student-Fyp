@@ -7,6 +7,7 @@ import compilerReducer from "../features/compiler/compilerSlice";
 import QuestionsReducer from '../features/questionsSlice/QuestionsSlice';
 import studentStatsReducer from "../features/studentPortal/StudentStatsSlice";
 import submissionReducer from "../features/submissions/submissionSlice";
+import StudentProfileSlice from "../features/studentPortal/StudentProfileSlice";
 const store = configureStore({
     reducer: {
         studentAuth: studentAuthReducer,
@@ -17,7 +18,8 @@ const store = configureStore({
         compiler: compilerReducer,
         Question: QuestionsReducer,
         studentStats: studentStatsReducer,
-        submission: submissionReducer
+        submission: submissionReducer,
+        studentProfile: StudentProfileSlice,
 
     },
 });

@@ -21,6 +21,7 @@ import StudentQuestionsPage from './pages/StudentQuestionsPage.jsx';
 import CourseSubmissions from './pages/CourseSubmissions.jsx';
 import SingleQuestionDetail from './pages/SingleQuestionDetail.jsx';
 import CourseModulesResults from './pages/CourseModulesResults.jsx';
+import StudentProfilePage from './pages/StudentProfilePage.jsx';
 
 const router = createBrowserRouter([
   {
@@ -101,6 +102,14 @@ const router = createBrowserRouter([
         element: (
           <>
             <SingleQuestionDetail />
+          </>
+        )
+      },
+      {
+        path: "/profile",
+        element: (
+          <>
+            <StudentProfilePage />
           </>
         )
       },
