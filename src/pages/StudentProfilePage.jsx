@@ -6,9 +6,12 @@ import {
     getStudentProfile,
     clearStudentProfile,
     updateStudentProfileImage,
+    updateStudentProfile,
 } from "../features/studentPortal/studentProfileSlice";
+import { useForm } from "react-hook-form";
 
 function StudentProfilePage() {
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [isStatsOpen, setIsStatsOpen] = useState(true); // Collapsible stats
@@ -16,6 +19,7 @@ function StudentProfilePage() {
     const [isPreviewOpen, setIsPreviewOpen] = useState(false); // Modal for preview
     const [imagePreview, setImagePreview] = useState(null); // Preview image
     const [selectedFile, setSelectedFile] = useState(null); // File for upload
+    const [isFormOpen, setIsFormOpen] = useState(true); // Collapsible form
 
     const { student, loading, error } = useSelector((state) => state.studentProfile);
 
@@ -26,7 +30,14 @@ function StudentProfilePage() {
             dispatch(clearStudentProfile()); // Clean up state when component unmounts
         };
     }, [dispatch]);
-
+    const { register, handleSubmit, reset } = useForm({
+        defaultValues: student || {},
+    });
+    useEffect(() => {
+        if (student) {
+            reset(student); // Populate form with fetched data
+        }
+    }, [student, reset]);
     // Handle image preview
     const handleImageChange = (e) => {
         const file = e.target.files && e.target.files[0];
@@ -76,6 +87,12 @@ function StudentProfilePage() {
             </div>
         );
     }
+    const onSubmit = (data) => {
+        console.log("Form Data Submitted: ", data);
+        // console.log(data, " update the profile data ")
+        // Dispatch form submission action here if needed
+        dispatch(updateStudentProfile(data))
+    };
 
     return (
         <div className="min-h-screen bg-gray-900 text-gray-200 font-mono">
@@ -121,6 +138,70 @@ function StudentProfilePage() {
                         &larr; Back
                     </button>
                 </div>
+            </div>
+
+            {/* Form Section */}
+            <div className="px-6 py-4 bg-gray-800 mt-4 rounded-lg shadow-md">
+                <div
+                    onClick={() => setIsFormOpen(!isFormOpen)}
+                    className="flex justify-between items-center cursor-pointer"
+                >
+                    <h2 className="text-xl font-bold text-green-400">Update Profile</h2>
+                    <span className="text-green-300">{isFormOpen ? "▼" : "▲"}</span>
+                </div>
+                {isFormOpen && (
+                    <form onSubmit={handleSubmit(onSubmit)} className="mt-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div className="flex flex-col">
+                                <label className="text-gray-300 mb-2">Name</label>
+                                <input
+                                    type="text"
+                                    {...register("name")}
+                                    className="p-2 rounded bg-gray-700 text-gray-200 border border-gray-600 focus:ring focus:ring-green-500"
+                                />
+                            </div>
+                            <div className="flex flex-col">
+                                <label className="text-gray-300 mb-2">Bio</label>
+                                <textarea
+                                    rows="1"
+                                    {...register("bio")}
+                                    className="p-2 rounded bg-gray-700 text-gray-200 border border-gray-600 focus:ring focus:ring-green-500"
+                                ></textarea>
+                            </div>
+
+                            <div className="flex flex-col">
+                                <label className="text-gray-300 mb-2">Major</label>
+                                <input
+                                    type="text"
+                                    {...register("major")}
+                                    className="p-2 rounded bg-gray-700 text-gray-200 border border-gray-600 focus:ring focus:ring-green-500"
+                                />
+                            </div>
+                            {[
+                                { label: "Twitter", key: "twitter" },
+                                { label: "Facebook", key: "facebook" },
+                                { label: "LinkedIn", key: "linkedin" },
+                            ].map((link) => (
+                                <div key={link.key} className="flex flex-col">
+                                    <label className="text-gray-300 mb-2">{link.label}</label>
+                                    <input
+                                        type="url"
+                                        {...register(link.key)}
+                                        className="p-2 rounded bg-gray-700 text-gray-200 border border-gray-600 focus:ring focus:ring-green-500"
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                        <div className="mt-6 flex justify-end">
+                            <button
+                                type="submit"
+                                className="px-4 py-2 bg-green-500 text-white rounded-lg shadow hover:bg-green-400 transition"
+                            >
+                                Save Changes
+                            </button>
+                        </div>
+                    </form>
+                )}
             </div>
 
             {/* Collapsible Stats Section */}
@@ -183,12 +264,20 @@ function StudentProfilePage() {
                                     <p className="text-sm text-gray-400 mt-2">
                                         {course.description || "No description available."}
                                     </p>
-                                    <button
-                                        className="mt-4 px-3 py-2 bg-green-500 text-gray-100 rounded hover:bg-green-400 transition"
-                                        onClick={() => navigate(`/courses/${course._id}`)}
-                                    >
-                                        View Course
-                                    </button>
+                                    <div className="flex flex-row justify-center space-x-6 items-center">
+                                        <button
+                                            className="mt-4 px-3 py-2 bg-green-500 text-gray-100 rounded hover:bg-green-400 transition"
+                                            onClick={() => navigate(`/coursemodules/${course._id}`)}
+                                        >
+                                            View Course
+                                        </button>
+                                        <button
+                                            className="mt-4 px-3  py-2 bg-green-500 text-gray-100 rounded hover:bg-green-400 transition"
+                                            onClick={() => navigate(`/coursesresult/${course._id}`)}
+                                        >
+                                            View Grade
+                                        </button>
+                                    </div>
                                 </div>
                             ))
                         ) : (

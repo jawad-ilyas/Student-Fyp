@@ -13,13 +13,13 @@ export const getStudentProfile = createAsyncThunk(
                 throw new Error("Authentication token not found.");
             }
 
-            console.log("studentInfo.token : ", studentInfo.token)
+            // console.log("studentInfo.token : ", studentInfo.token)
             const config = {
                 headers: {
                     Authorization: `Bearer ${studentInfo.token}`,
                 },
             };
-            console.log("Axios Config:", config);
+            // console.log("Axios Config:", config);
 
             const response = await axios.get(`${API_URL}/${studentInfo._id}/getStudentProfile`, config); // API call to fetch student profile
             return response.data.data; // Assuming backend sends profile under `data.data`
@@ -59,11 +59,12 @@ export const updateStudentProfile = createAsyncThunk(
             const config = {
                 headers: {
                     Authorization: `Bearer ${studentInfo?.token}`,
-                    "Content-Type": "multipart/form-data",
+                   
                 },
             };
+            console.log("formData : ", formData)
             const response = await axios.post(`${API_URL}/${studentInfo._id}/updateStudentProfile`, formData, config);
-            return response.data?.data; // Assuming backend returns updated image URL
+            return response.data?.data; 
         } catch (error) {
             return rejectWithValue(error.response?.data || "Failed to update profile image.");
         }
@@ -123,7 +124,7 @@ const studentProfileSlice = createSlice({
             })
             .addCase(updateStudentProfile.fulfilled, (state, action) => {
                 state.loading = false;
-                state.imageUrl = action.payload;
+                state.student = action.payload; // Set student data
             })
             .addCase(updateStudentProfile.rejected, (state, action) => {
                 state.loading = false;

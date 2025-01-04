@@ -30,6 +30,30 @@ export const submitSubmission = createAsyncThunk(
     }
 );
 
+// POST /api/v1/submissions/singlequestion
+export const submitSingleQuestion = createAsyncThunk(
+    "submissions/submitSingleQuestion",
+    async ({ questionId, code, output }, { rejectWithValue }) => {
+        console.log("question id ", questionId)
+        console.log("code ", code)
+        console.log("output  ", output)
+        try {
+            const studentInfo = JSON.parse(localStorage.getItem("studentInfo"));
+
+            const payload = {
+                questionId, // The ID of the question being solved
+                code,       // The code submitted for the question
+                output,     // The output of the code
+            };
+
+            const response = await axios.post(`http://localhost:5000/api/v1/submissions/${studentInfo?._id}/singlequestion`, payload);
+            return response.data; // Return backend response
+        } catch (error) {
+            return rejectWithValue(error.response?.data || "Failed to submit question.");
+        }
+    }
+);
+
 // GET /api/v1/submissions/:moduleId (Fetch submission details)
 export const fetchSubmissionDetails = createAsyncThunk(
     "submissions/fetchSubmissionDetails",
@@ -77,6 +101,8 @@ const submissionSlice = createSlice({
         submission: null, // Data about a specific submission
         loading: false,
         error: null,
+        singleQuestionSubmission: null, // Data for single question submissions
+
         successMessage: null,
     },
     reducers: {
@@ -126,6 +152,21 @@ const submissionSlice = createSlice({
                 state.submissions = action.payload;
             })
             .addCase(fetchSubmissionsByCourse.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+            // Submit Single Question
+            .addCase(submitSingleQuestion.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+                state.successMessage = null;
+            })
+            .addCase(submitSingleQuestion.fulfilled, (state, action) => {
+                state.loading = false;
+                state.successMessage = "Question submitted successfully!";
+                state.singleQuestionSubmission = action.payload; // Save the single question response
+            })
+            .addCase(submitSingleQuestion.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             });

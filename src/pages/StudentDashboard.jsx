@@ -33,8 +33,7 @@ function StudentDashboard() {
 
     return (
         <div className="min-h-screen w-full bg-gray-900 text-gray-200 font-mono">
-            {/* Header */}
-            <Header />
+        
 
             {/* Courses Grid */}
             <div className="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -93,7 +92,7 @@ function StudentDashboard() {
                                     onClick={() => navigate(`/coursesresult/${course._id}`)}
                                     className="mt-2 w-full px-3 py-2 bg-green-600 text-white rounded hover:bg-green-500 transition"
                                 >
-                                    Check Result Of The Modules
+                                    Check Grades
                                 </button>
                                 {/* <button
                                     onClick={() => navigate(`/courses/${course._id}/submissions`)}

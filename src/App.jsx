@@ -4,12 +4,12 @@ import Header from './components/Header';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 const App = () => {
-  
+
   return (
     <div className="min-h-screen bg-gray-100">
 
 
-
+      <Header />
       {/* Main Content */}
       <main className=" ">
         <Outlet />
