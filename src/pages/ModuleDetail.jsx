@@ -197,12 +197,19 @@ function ModuleDetail() {
                 <div className="flex items-center space-x-2 mt-3 text-xs text-gray-400">
                     <ClockIcon className="w-4 h-4" />
                     <p>
-                        <span className="font-semibold">
-                            {timeStatus} {timeStatus !== "Closed" && " - "}
-                        </span>
-                        {timeRemainingLabel}
+                        {timeStatus === "Closed" ? (
+                            <span className="text-red-500 font-semibold capitalize"> time is over!</span>
+                        ) : (
+                            <>
+                                <span className="font-semibold">
+                                    {timeStatus} {timeStatus !== "Closed" && " - "}
+                                </span>
+                                {timeRemainingLabel}
+                            </>
+                        )}
                     </p>
                 </div>
+
                 <div className="mt-3 flex space-x-2">
                     <button
                         onClick={() => handleDownload("pdf")}
@@ -305,13 +312,16 @@ function ModuleDetail() {
                 )}
                 {submissionError && <p className="text-red-400 text-sm mb-2">{submissionError}</p>}
 
-                <button
-                    onClick={handleSubmitAll}
-                    className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-500 transition"
-                    disabled={!isWithinTime || submissionLoading}
-                >
-                    {submissionLoading ? "Submitting..." : "Submit All Solutions"}
-                </button>
+                {isWithinTime && (
+                    <button
+                        onClick={handleSubmitAll}
+                        className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-500 transition"
+                        disabled={submissionLoading}
+                    >
+                        {submissionLoading ? "Submitting..." : "Submit All Solutions"}
+                    </button>
+                )}
+
             </div>
         </div>
     );
