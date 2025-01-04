@@ -46,9 +46,9 @@ function ModuleDetail() {
     }, [dispatch, moduleId]);
 
     useEffect(() => {
-        if (module && module.questions) {
-            const initial = module.questions.map((qObj) => ({
-                questionId: qObj.question._id,
+        if (module && module?.questions) {
+            const initial = module?.questions?.map((qObj) => ({
+                questionId: qObj?.question?._id,
                 code: "",
                 text: "",
                 output: "",
@@ -61,8 +61,8 @@ function ModuleDetail() {
     let timeStatus = "Closed";
     let timeRemainingLabel = "";
     if (module) {
-        const start = new Date(module.startTime);
-        const end = new Date(module.endTime);
+        const start = new Date(module?.startTime);
+        const end = new Date(module?.endTime);
 
         if (now < start) {
             timeStatus = "Locked";
@@ -154,13 +154,7 @@ function ModuleDetail() {
             </div>
         );
     }
-    if (error) {
-        return (
-            <div className="p-4 text-red-400 bg-gray-900 h-screen">
-                {error}
-            </div>
-        );
-    }
+
     if (!module) {
         return (
             <div className="p-4 text-gray-400 bg-gray-900 h-screen">
@@ -193,7 +187,7 @@ function ModuleDetail() {
             </div>
 
             <div className="bg-gray-800 rounded p-4 border border-gray-700 shadow mb-6">
-                <p className="text-sm text-gray-300">{module.description}</p>
+                <p className="text-sm text-gray-300">{module?.description}</p>
                 <div className="flex items-center space-x-2 mt-3 text-xs text-gray-400">
                     <ClockIcon className="w-4 h-4" />
                     <p>
@@ -220,6 +214,22 @@ function ModuleDetail() {
                     </button>
                 </div>
             </div>
+            {module.questions.length === 0 &&
+                <div className="bg-gray-800 p-4 rounded shadow text-center">
+                    <h2 className="text-xl font-bold text-red-400 mb-4">
+                        No Question Found
+                    </h2>
+                    <p className="text-gray-400">
+                        It seems there are no Question available for this Module yet.
+                    </p>
+                    {/* Dummy Layout */}
+                    <div className="mt-6 p-4 bg-gray-700 rounded">
+                        <p className="text-gray-500">
+                            Once Module  are available, they will appear here with detailed
+                            information about your progress.
+                        </p>
+                    </div>
+                </div>}
 
             {module.questions?.map((qObj, index) => {
                 const { _id, title, problemStatement, sampleTestCases } = qObj.question;
@@ -310,9 +320,11 @@ function ModuleDetail() {
                 {submissionSuccess && (
                     <p className="text-green-400 text-sm mb-2">{submissionSuccess}</p>
                 )}
-                {submissionError && <p className="text-red-400 text-sm mb-2">{submissionError}</p>}
+                {submissionError && (
+                    <p className="text-red-400 text-sm mb-2">{submissionError?.message}</p>
+                )}
 
-                {isWithinTime && (
+                {isWithinTime && module.questions?.length !== 0 && (
                     <button
                         onClick={handleSubmitAll}
                         className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-500 transition"
@@ -321,8 +333,8 @@ function ModuleDetail() {
                         {submissionLoading ? "Submitting..." : "Submit All Solutions"}
                     </button>
                 )}
-
             </div>
+
         </div>
     );
 }

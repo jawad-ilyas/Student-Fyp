@@ -8,6 +8,7 @@ const API_URL = "http://localhost:5000/api/v1/submissions";
 export const submitSubmission = createAsyncThunk(
     "submissions/submitSubmission",
     async ({ courseId, teacherId, moduleId, solutions }, { rejectWithValue }) => {
+        console.log("submit solution is called ")
         try {
             const studentInfo = JSON.parse(localStorage.getItem("studentInfo"));
             const config = {
@@ -23,8 +24,12 @@ export const submitSubmission = createAsyncThunk(
             };
 
             const response = await axios.post(`${API_URL}/${studentInfo?._id}/submit`, payload, config);
-            return response.data; // Backend response
+            console.log(response?.data)
+            console.log(response?.data?.data)
+            return response?.data?.data;
+            // return response.data?.data; // Backend response
         } catch (error) {
+            console.log("else is called for submit submission slice") 
             return rejectWithValue(error.response?.data || "Failed to submit module");
         }
     }
@@ -47,7 +52,7 @@ export const submitSingleQuestion = createAsyncThunk(
             };
 
             const response = await axios.post(`http://localhost:5000/api/v1/submissions/${studentInfo?._id}/singlequestion`, payload);
-            return response.data; // Return backend response
+            return response.data?.data; // Return backend response
         } catch (error) {
             return rejectWithValue(error.response?.data || "Failed to submit question.");
         }
@@ -127,6 +132,7 @@ const submissionSlice = createSlice({
             })
             .addCase(submitSubmission.rejected, (state, action) => {
                 state.loading = false;
+                console.log("submitSubmission action.payload", action.payload?.message)
                 state.error = action.payload;
             })
 

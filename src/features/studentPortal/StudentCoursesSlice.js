@@ -11,7 +11,7 @@ export const fetchStudentCourses = createAsyncThunk(
         try {
             // If you need the token from localStorage or Redux:
             const studentInfo = JSON.parse(localStorage.getItem("studentInfo"));
-            console.log("studentinfo ", studentInfo?.token)
+         
             if (!studentInfo || !studentInfo.token) {
                 throw new Error("No student token found in localStorage");
             }
