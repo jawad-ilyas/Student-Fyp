@@ -133,12 +133,18 @@ function ModuleDetail() {
             alert("Cannot submit solutions: time window has passed or not started.");
             return;
         }
-        console.log(module?.course)
+
         const courseId = module?.course;
-        console.log(module?.teacher?._id)
         const teacherId = module?.teacher?._id;
-        dispatch(submitSubmission({ courseId, teacherId, moduleId, solutions }));
+
+        const updatedSolutions = solutions.map((solution, index) => ({
+            ...solution,
+            marks: module.questions[index].marks, // Include marks for each question
+        }));
+
+        dispatch(submitSubmission({ courseId, teacherId, moduleId, solutions: updatedSolutions }));
     };
+
 
     const handleDownload = (format) => {
         window.open(
@@ -235,12 +241,14 @@ function ModuleDetail() {
                 const { _id, title, problemStatement, sampleTestCases } = qObj.question;
                 const codeValue = solutions[index]?.code || "";
                 const outputValue = solutions[index]?.output || "";
+                const marks = qObj.marks; // Access the marks field from the parent object
 
                 return (
                     <div key={_id} className="mb-6 bg-gray-800 p-4 rounded border border-gray-700">
                         <h2 className="text-lg font-semibold text-green-300">
                             Question {index + 1}: {title}
                         </h2>
+                        <p className="text-sm text-yellow-300">Marks: {marks}</p> {/* Display marks here */}
                         {problemStatement && (
                             <p className="text-sm text-gray-300 mt-1">{problemStatement}</p>
                         )}
@@ -267,7 +275,7 @@ function ModuleDetail() {
                         )}
 
                         <div className="mt-4">
-                            <label className="block text-sm text-gray-400 mb-1 flex items-center">
+                            <label className=" text-sm text-gray-400 mb-1 flex items-center">
                                 <CodeBracketIcon className="w-4 h-4 mr-1" />
                                 Code Solution (optional)
                             </label>
@@ -315,6 +323,7 @@ function ModuleDetail() {
                     </div>
                 );
             })}
+
 
             <div className="mt-4">
                 {submissionSuccess && (
