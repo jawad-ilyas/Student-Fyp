@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 const Header = () => {
     const handleLogout = () => {
@@ -9,31 +9,45 @@ const Header = () => {
     };
 
     return (
-        <div className="px-6 py-4 bg-gray-800 shadow-md flex justify-between items-center">
-            <h1 className="text-xl font-bold text-green-400">
-                <Link to="/">My Courses</Link>
-            </h1>
-            <div className="space-x-4 flex items-center">
-                <Link to="/dashboard" className="text-white hover:text-green-400">
-                    Dashboard
-                </Link>
+        <div className="px-6 py-4 bg-gradient-to-r from-teal-600 to-blue-500 shadow-md">
+            <div className="container mx-auto flex justify-between items-center">
+                {/* Student Header Title */}
+                <h1 className="text-2xl font-bold text-white">
+                    <Link to="/">Student Portal</Link>
+                </h1>
 
-                <Link to="/problems" className="text-white hover:text-green-400">
-                    Problems
-                </Link>
+                {/* Navigation Links */}
+                <div className="space-x-6 flex items-center">
+                    {/* Dashboard Link */}
+                    
 
-                {/* Profile Link */}
-                <Link to="/profile" className="text-white hover:text-green-400">
-                    Profile
-                </Link>
+                  
 
-                {/* Logout Button */}
-                <button
-                    onClick={handleLogout}
-                    className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-500 transition"
-                >
-                    Logout
-                </button>
+
+                    {/* About Us Link */}
+                    <Link
+                        to="/aboutus"
+                        className="text-white hover:text-yellow-300 font-medium transition duration-300"
+                    >
+                        About Us
+                    </Link>
+
+                    {/* Resources Link */}
+                    <Link
+                        to="/resources"
+                        className="text-white hover:text-yellow-300 font-medium transition duration-300"
+                    >
+                        Resources
+                    </Link>
+
+                    {/* Logout Button */}
+                    <button
+                        onClick={handleLogout}
+                        className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-500 transition duration-300"
+                    >
+                        Logout
+                    </button>
+                </div>
             </div>
         </div>
     );
