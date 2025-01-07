@@ -35,6 +35,7 @@ export const getStudentProfile = createAsyncThunk(
 export const updateStudentProfileImage = createAsyncThunk(
     "profile/updateStudentProfileImage",
     async (formData, { rejectWithValue }) => {
+        console.log("formadata of the studnet " , formData)
         try {
             const studentInfo = JSON.parse(localStorage.getItem("studentInfo"));
             const config = {

@@ -202,7 +202,7 @@ function StudentProfilePage() {
                         </div>
                     </form>
                 )}
-            </div>
+            </div> 
 
             {/* Collapsible Stats Section */}
             <div className="px-6 py-4 bg-gray-800 mt-4 rounded-lg shadow-md">

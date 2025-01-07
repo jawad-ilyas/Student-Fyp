@@ -28,15 +28,15 @@ export const studentLogin = createAsyncThunk(
 const studentAuthSlice = createSlice({
     name: "studentAuth",
     initialState: {
-        userInfo: null,     // will store { _id, name, email, role, token } if successful
+        studentInfo: null,     // will store { _id, name, email, role, token } if successful
         loading: false,
         error: null,
     },
     reducers: {
         // 2) Logout action (optional for now):
         logout(state) {
-            state.userInfo = null;
-            localStorage.removeItem("userInfo");
+            state.studentInfo = null;
+            localStorage.removeItem("studentInfo");
         },
     },
     extraReducers: (builder) => {
@@ -47,7 +47,7 @@ const studentAuthSlice = createSlice({
             })
             .addCase(studentLogin.fulfilled, (state, action) => {
                 state.loading = false;
-                state.userInfo = action.payload; // e.g. { _id, name, email, token, role: "student" }
+                state.studentInfo = action.payload; // e.g. { _id, name, email, token, role: "student" }
             })
             .addCase(studentLogin.rejected, (state, action) => {
                 state.loading = false;

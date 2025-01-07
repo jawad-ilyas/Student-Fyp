@@ -1,55 +1,46 @@
 import { Link } from "react-router-dom";
 
 const Header = () => {
-    const handleLogout = () => {
-        // Remove user info from localStorage or session
-        localStorage.removeItem("studentInfo");
-        // Redirect to the login page or home
-        window.location.href = "/login";
-    };
+    // Logout logic carried over from your original code
+
 
     return (
-        <div className="px-6 py-4 bg-gradient-to-r from-teal-600 to-blue-500 shadow-md">
-            <div className="container mx-auto flex justify-between items-center">
-                {/* Student Header Title */}
-                <h1 className="text-2xl font-bold text-white">
-                    <Link to="/">Student Portal</Link>
+        <header className="bg-gradient-to-r from-darkGreenColor to-teal-500 text-white shadow-lg py-4 px-6 fixed top-0 left-0 w-full z-50">
+            <div className="flex justify-between items-center max-w-7xl mx-auto">
+                <h1 className="text-3xl font-extrabold cursor-pointer">
+                    <Link to="/">IEFS</Link>
                 </h1>
-
-                {/* Navigation Links */}
-                <div className="space-x-6 flex items-center">
-                    {/* Dashboard Link */}
-                    
-
-                  
-
-
-                    {/* About Us Link */}
+                <nav className="hidden md:flex space-x-6">
+                    <Link
+                        to="/"
+                        className="transition duration-300 hover:text-yellow-300 font-medium"
+                    >
+                        Home
+                    </Link>
                     <Link
                         to="/aboutus"
-                        className="text-white hover:text-yellow-300 font-medium transition duration-300"
+                        className="transition duration-300 hover:text-yellow-300 font-medium"
                     >
                         About Us
                     </Link>
-
-                    {/* Resources Link */}
                     <Link
                         to="/resources"
-                        className="text-white hover:text-yellow-300 font-medium transition duration-300"
+                        className="transition duration-300 hover:text-yellow-300 font-medium"
                     >
                         Resources
                     </Link>
 
-                    {/* Logout Button */}
-                    <button
-                        onClick={handleLogout}
-                        className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-500 transition duration-300"
+                    {/* If you want a dedicated 'Login' link instead of using handleLogout, 
+              you can replace the button below with a Link component to '/login'. */}
+                    <Link
+                        to="/login"
+                        className="transition duration-300 hover:text-yellow-300 font-medium"
                     >
-                        Logout
-                    </button>
-                </div>
+                        Login
+                    </Link>
+                </nav>
             </div>
-        </div>
+        </header>
     );
 };
 

@@ -4,8 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 const CustomHeader = () => {
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const navigate = useNavigate();
-    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
-    const name = userInfo?.data?.name;
+    const studentInfo = JSON.parse(localStorage.getItem("studentInfo"));
+    const name = studentInfo?.name;
 
     const handleLogout = () => {
         // Clear user information from localStorage
@@ -45,19 +45,7 @@ const CustomHeader = () => {
                         Profile
                     </p>
 
-                    <p
-                        onClick={() => navigate("/aboutus")}
-                        className="cursor-pointer text-white font-medium hover:text-yellow-300 transition duration-300"
-                    >
-                        About Us
-                    </p>
-
-                    <p
-                        onClick={() => navigate("/resources")}
-                        className="cursor-pointer text-white font-medium hover:text-yellow-300 transition duration-300"
-                    >
-                        Resources
-                    </p>
+                 
 
                     {/* Profile and Logout Dropdown */}
                     <div className="relative">

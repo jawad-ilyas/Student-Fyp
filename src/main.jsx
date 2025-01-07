@@ -22,7 +22,7 @@ import CourseSubmissions from './pages/CourseSubmissions.jsx';
 import SingleQuestionDetail from './pages/SingleQuestionDetail.jsx';
 import CourseModulesResults from './pages/CourseModulesResults.jsx';
 import StudentProfilePage from './pages/StudentProfilePage.jsx';
-
+import Register from './pages/Register.jsx';
 const router = createBrowserRouter([
   {
     path: '/',
@@ -32,10 +32,10 @@ const router = createBrowserRouter([
         path: "",
         element: <Home />,
       },
-      // {
-      //   path: 'register',
-      //   element: <Register />,
-      // },
+      {
+        path: 'register',
+        element: <Register />,
+      },
 
       {
         path: 'aboutus',

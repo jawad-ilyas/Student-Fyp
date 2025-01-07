@@ -7,22 +7,22 @@ const Header = () => {
 
     const handleLogout = () => {
         // Clear user information from localStorage
-        localStorage.removeItem("userInfo");
+        localStorage.removeItem("studentInfo");
         // Redirect to login page
         navigate("/login");
     };
 
- 
+
     return (
         <header className="flex justify-between items-center p-4 border-b shadow-sm relative">
             <h1 className="text-2xl font-bold text-gray-800">Logo</h1>
             <div className="space-x-2">
-                    <Link to={"/"} className="text-gray-600 font-medium cursor-pointer">Home</Link>
-                    <Link to={"/aboutus"} className="text-gray-600 font-medium cursor-pointer">About Us</Link>
-                    <Link to={"/resources"} className="text-gray-600 font-medium cursor-pointer">Resources</Link>
-                
+                <Link to={"/"} className="text-gray-600 font-medium cursor-pointer">Home</Link>
+                <Link to={"/aboutus"} className="text-gray-600 font-medium cursor-pointer">About Us</Link>
+                <Link to={"/resources"} className="text-gray-600 font-medium cursor-pointer">Resources</Link>
+
             </div>
-            
+
             <nav className="flex items-center space-x-4">
                 <p className="text-gray-600 font-medium cursor-pointer">Courses</p>
                 <div className="relative">

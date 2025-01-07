@@ -2,13 +2,14 @@ import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { studentLogin } from "../features/studentPortal/StudentAuthSlice";
-
+import { Link } from "react-router-dom";
+import { useEffect } from "react";
 function StudentLogin() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    // Pull loading/error/userInfo from Redux
-    const { loading, error } = useSelector((state) => state.studentAuth);
+    // Pull loading/error/studentInfo from Redux
+    const { loading, error, studentInfo } = useSelector((state) => state.studentAuth);
 
     // React Hook Form setup
     const {
@@ -17,6 +18,16 @@ function StudentLogin() {
         formState: { errors },
     } = useForm();
 
+    useEffect(() => {
+        // Clear previous errors when loading the login page
+
+
+        // If the user is already logged in, redirect to the dashboard
+        const studentInfoStorage = localStorage.getItem("studentInfo");
+        if (studentInfoStorage || studentInfo) {
+            navigate("/dashboard"); // Replace with your desired route
+        }
+    }, [dispatch, navigate, studentInfo]);
     // onSubmit handler from React Hook Form
     const onSubmit = async (formData) => {
         try {
@@ -27,7 +38,7 @@ function StudentLogin() {
             const resultAction = await dispatch(studentLogin({ email, password }));
 
             if (studentLogin.fulfilled.match(resultAction)) {
-                // If success, store userInfo in localStorage
+                // If success, store studentInfo in localStorage
                 localStorage.setItem("studentInfo", JSON.stringify(resultAction.payload));
                 // Navigate to student dashboard
                 navigate("/dashboard");
@@ -122,6 +133,17 @@ function StudentLogin() {
                         {loading ? "Logging in..." : "Login"}
                     </button>
                 </form>
+                {/* <div className="mt-6 text-center">
+                    <p className="text-gray-500 text-sm">
+                        Don't have an account?{" "}
+                        <Link
+                            to="/register"
+                            className="text-teal-600 hover:underline font-medium"
+                        >
+                            Register here
+                        </Link>
+                    </p>
+                </div> */}
             </div>
         </div>
     );

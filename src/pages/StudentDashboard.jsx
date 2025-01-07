@@ -32,7 +32,7 @@ function StudentDashboard() {
     }
 
     return (
-        <div className="min-h-screen w-full bg-gray-900 text-gray-200 font-mono">
+        <div className="min-h-screen w-full pt-20 bg-gray-900 text-gray-200 font-mono">
         
 
             {/* Courses Grid */}
