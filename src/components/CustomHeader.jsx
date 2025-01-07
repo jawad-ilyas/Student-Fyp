@@ -56,12 +56,6 @@ const CustomHeader = () => {
                         Problems
                     </p>
 
-                    <p
-                        onClick={() => navigate("/profile")}
-                        className="cursor-pointer text-white font-medium hover:text-yellow-300 transition duration-300"
-                    >
-                        Profile
-                    </p>
 
                     {/* Profile and Logout Dropdown */}
                     <div className="relative">

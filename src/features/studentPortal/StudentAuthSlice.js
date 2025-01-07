@@ -48,6 +48,8 @@ const studentAuthSlice = createSlice({
             .addCase(studentLogin.fulfilled, (state, action) => {
                 state.loading = false;
                 state.studentInfo = action.payload; // e.g. { _id, name, email, token, role: "student" }
+                localStorage.setItem("studentInfo", JSON.stringify(action.payload));
+
             })
             .addCase(studentLogin.rejected, (state, action) => {
                 state.loading = false;

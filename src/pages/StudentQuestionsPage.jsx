@@ -226,7 +226,6 @@ function StudentQuestionsPage() {
                             <thead>
                                 <tr className="bg-gray-700 text-gray-300 uppercase text-xs tracking-wider">
                                     <th className="p-4 text-left font-medium">Index</th>
-                                    <th className="p-4 text-left font-medium">Status</th>
                                     <th className="p-4 text-left font-medium">Title</th>
                                     <th className="p-4 text-left font-medium">Difficulty</th>
                                     <th className="p-4 text-left font-medium">Category</th>
@@ -246,13 +245,6 @@ function StudentQuestionsPage() {
                                             <td className="p-4 text-yellow-300">{index + 1}</td>
 
                                             {/* Show a “solved” or “unsolved” icon */}
-                                            <td className="p-4 text-center">
-                                                {solved ? (
-                                                    <span className="text-green-400 font-bold">Solved</span>
-                                                ) : (
-                                                    <span className="text-red-400">Unsolved</span>
-                                                )}
-                                            </td>
                                             <td className="p-4 text-green-200">
                                                 {/* Link to admin question detail page */}
                                                 <Link

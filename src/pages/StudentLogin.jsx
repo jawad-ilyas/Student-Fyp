@@ -24,7 +24,7 @@ function StudentLogin() {
 
         // If the user is already logged in, redirect to the dashboard
         const studentInfoStorage = localStorage.getItem("studentInfo");
-        if (studentInfoStorage || studentInfo) {
+        if (studentInfoStorage) {
             navigate("/dashboard"); // Replace with your desired route
         }
     }, [dispatch, navigate, studentInfo]);
@@ -39,7 +39,6 @@ function StudentLogin() {
 
             if (studentLogin.fulfilled.match(resultAction)) {
                 // If success, store studentInfo in localStorage
-                localStorage.setItem("studentInfo", JSON.stringify(resultAction.payload));
                 // Navigate to student dashboard
                 navigate("/dashboard");
             } else {

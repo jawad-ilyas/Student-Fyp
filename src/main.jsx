@@ -8,6 +8,8 @@ import { RouterProvider } from 'react-router-dom';
 import { createBrowserRouter } from 'react-router-dom';
 import App from '../src/App';
 
+import ProtectedRoute from './components/ProtectedRoute.jsx';
+
 
 import Home from '../src/pages/Home';
 
@@ -29,14 +31,13 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       {
-        path: "",
+        path: '',
         element: <Home />,
       },
       {
         path: 'register',
         element: <Register />,
       },
-
       {
         path: 'aboutus',
         element: <AboutUs />,
@@ -46,79 +47,77 @@ const router = createBrowserRouter([
         element: <Resources />,
       },
       {
-        path: "/login", element: < StudentLogin />
-
+        path: '/login',
+        element: <StudentLogin />,
+      },
+      {
+        path: '/profile',
+        element: (
+          <ProtectedRoute>
+            <StudentProfilePage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: 'dashboard',
         element: (
-          <>
+          <ProtectedRoute>
             <StudentDashboard />
-          </>
+          </ProtectedRoute>
         ),
       },
       {
         path: 'coursemodules/:courseId',
         element: (
-          <>
+          <ProtectedRoute>
             <CourseModules />
-          </>
+          </ProtectedRoute>
         ),
       },
       {
         path: '/coursesresult/:courseId/',
         element: (
-          <>
+          <ProtectedRoute>
             <CourseModulesResults />
-          </>
+          </ProtectedRoute>
         ),
       },
       {
         path: '/modules/:moduleId',
         element: (
-          <>
+          <ProtectedRoute>
             <ModuleDetail />
-          </>
+          </ProtectedRoute>
         ),
       },
       {
         path: '/problems',
         element: (
-          <>
+          <ProtectedRoute>
             <StudentQuestionsPage />
-          </>
+          </ProtectedRoute>
         ),
       },
       {
-        path: "/courses/:courseId/module/:moduleId/submissions",
+        path: '/courses/:courseId/module/:moduleId/submissions',
         element: (
-          <>
+          <ProtectedRoute>
             <CourseSubmissions />
-          </>
-        )
+          </ProtectedRoute>
+        ),
       },
       {
-        path: "/questions/:questionId",
+        path: '/questions/:questionId',
         element: (
-          <>
+          <ProtectedRoute>
             <SingleQuestionDetail />
-          </>
-        )
+          </ProtectedRoute>
+        ),
       },
-      {
-        path: "/profile",
-        element: (
-          <>
-            <StudentProfilePage />
-          </>
-        )
-      },
-
-
-
     ],
   },
 ]);
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Provider store={store}>
