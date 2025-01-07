@@ -51,18 +51,28 @@ function StudentProfilePage() {
     };
 
     // Handle image upload
-    const handleImageUpload = () => {
-        if (selectedFile) {
+    const handleImageUpload = async () => {
+        if (!selectedFile) return;
+
+        try {
             const formData = new FormData();
             formData.append("image", selectedFile);
-            dispatch(updateStudentProfileImage(formData));
 
-            // Clear preview after dispatching
+            // 2. Await the thunk, ensuring it has completed
+            await dispatch(updateStudentProfileImage(formData)).unwrap();
+
+            // 3. Now refetch the updated student profile
+            await dispatch(getStudentProfile()).unwrap();
+
+        } catch (error) {
+            console.error("Error uploading image:", error);
+        } finally {
+            // 4. Clear the local preview
             setImagePreview(null);
             setSelectedFile(null);
-
         }
     };
+
 
     if (loading) {
         return (
@@ -92,10 +102,12 @@ function StudentProfilePage() {
         // console.log(data, " update the profile data ")
         // Dispatch form submission action here if needed
         dispatch(updateStudentProfile(data))
+
+
     };
 
     return (
-        <div className="min-h-screen bg-gray-900 text-gray-200 font-mono">
+        <div className="min-h-screen pt-16 bg-gray-900 text-gray-200 font-mono">
             {/* Hero Section */}
             <div className="relative bg-gradient-to-r from-green-500 via-green-400 to-green-500 shadow-lg">
                 <div className="absolute inset-0 bg-opacity-50 bg-gray-900"></div>
@@ -202,7 +214,7 @@ function StudentProfilePage() {
                         </div>
                     </form>
                 )}
-            </div> 
+            </div>
 
             {/* Collapsible Stats Section */}
             <div className="px-6 py-4 bg-gray-800 mt-4 rounded-lg shadow-md">

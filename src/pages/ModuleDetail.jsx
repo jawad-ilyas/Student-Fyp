@@ -10,6 +10,7 @@ import {
     DocumentArrowDownIcon,
     CodeBracketIcon,
 } from "@heroicons/react/24/outline";
+import { toast } from "react-toastify"; // <-- Import from react-toastify
 
 import { fetchSingleModule } from "../features/studentPortal/StudentModuleDetailSlice";
 import { submitSubmission, clearSubmissionState } from "../features/submissions/submissionSlice";
@@ -17,7 +18,7 @@ import { runCode } from "../features/compiler/compilerSlice";
 
 function ModuleDetail() {
     const { moduleId } = useParams();
-    const navigate = useNavigate();
+    const navigate = useNavigate(); // For navigation
     const dispatch = useDispatch();
 
     const {
@@ -56,6 +57,25 @@ function ModuleDetail() {
             setSolutions(initial);
         }
     }, [module]);
+
+    // Watch for submission success or errors, and show toast notifications
+    useEffect(() => {
+        if (submissionSuccess) {
+            toast.success(submissionSuccess);
+        }
+    }, [submissionSuccess]);
+
+    useEffect(() => {
+        if (submissionError) {
+            // If submissionError is an object with a "message" property,
+            // display that. Otherwise, show a generic error.
+            const errorMsg =
+                typeof submissionError === "string"
+                    ? submissionError
+                    : submissionError?.message || "Submission failed";
+            toast.error(errorMsg);
+        }
+    }, [submissionError]);
 
     const now = new Date();
     let timeStatus = "Closed";
@@ -106,7 +126,6 @@ function ModuleDetail() {
             return;
         }
 
-        const questionId = solutions[index].questionId;
         const languageToUse = "cpp17";
         const codeToRun = solutions[index].code;
         const testCases = module.questions[index].question.testCases || [];
@@ -124,7 +143,7 @@ function ModuleDetail() {
                 return copy;
             });
         } else {
-            alert("Error running code.");
+            toast.error("Error running code.");
         }
     };
 
@@ -144,7 +163,6 @@ function ModuleDetail() {
 
         dispatch(submitSubmission({ courseId, teacherId, moduleId, solutions: updatedSolutions }));
     };
-
 
     const handleDownload = (format) => {
         window.open(
@@ -171,7 +189,6 @@ function ModuleDetail() {
     if (error) {
         return (
             <div className="p-4 text-red-400 bg-gray-900 h-screen">
-                {/* Safely handle the error object */}
                 {typeof error === "string"
                     ? error
                     : error?.message || "An unexpected error occurred."}
@@ -180,10 +197,11 @@ function ModuleDetail() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-900 text-gray-200 p-6">
+        <div className="min-h-screen mt-16 bg-gray-900 text-gray-200 p-6">
+            {/* Top Section with updated Back Button */}
             <div className="flex items-center mb-6">
                 <button
-                    onClick={() => window.history.back()}
+                    onClick={() => navigate(-1)} // navigate back
                     className="flex items-center text-sm text-gray-400 hover:text-gray-200 mr-4"
                 >
                     <ArrowLeftIcon className="w-5 h-5 mr-1" />
@@ -198,11 +216,14 @@ function ModuleDetail() {
                     <ClockIcon className="w-4 h-4" />
                     <p>
                         {timeStatus === "Closed" ? (
-                            <span className="text-red-500 font-semibold capitalize"> time is over!</span>
+                            <span className="text-red-500 font-semibold capitalize">
+                                time is over!
+                            </span>
                         ) : (
                             <>
                                 <span className="font-semibold">
-                                    {timeStatus} {timeStatus !== "Closed" && " - "}
+                                    {timeStatus}{" "}
+                                    {timeStatus !== "Closed" && " - "}
                                 </span>
                                 {timeRemainingLabel}
                             </>
@@ -220,35 +241,40 @@ function ModuleDetail() {
                     </button>
                 </div>
             </div>
-            {module.questions.length === 0 &&
+
+            {module.questions.length === 0 && (
                 <div className="bg-gray-800 p-4 rounded shadow text-center">
                     <h2 className="text-xl font-bold text-red-400 mb-4">
                         No Question Found
                     </h2>
                     <p className="text-gray-400">
-                        It seems there are no Question available for this Module yet.
+                        It seems there are no Questions available for this Module yet.
                     </p>
                     {/* Dummy Layout */}
                     <div className="mt-6 p-4 bg-gray-700 rounded">
                         <p className="text-gray-500">
-                            Once Module  are available, they will appear here with detailed
-                            information about your progress.
+                            Once Module Questions are available, they will appear here with
+                            detailed information about your progress.
                         </p>
                     </div>
-                </div>}
+                </div>
+            )}
 
             {module.questions?.map((qObj, index) => {
                 const { _id, title, problemStatement, sampleTestCases } = qObj.question;
                 const codeValue = solutions[index]?.code || "";
                 const outputValue = solutions[index]?.output || "";
-                const marks = qObj.marks; // Access the marks field from the parent object
+                const marks = qObj.marks;
 
                 return (
-                    <div key={_id} className="mb-6 bg-gray-800 p-4 rounded border border-gray-700">
+                    <div
+                        key={_id}
+                        className="mb-6 bg-gray-800 p-4 rounded border border-gray-700"
+                    >
                         <h2 className="text-lg font-semibold text-green-300">
                             Question {index + 1}: {title}
                         </h2>
-                        <p className="text-sm text-yellow-300">Marks: {marks}</p> {/* Display marks here */}
+                        <p className="text-sm text-yellow-300">Marks: {marks}</p>
                         {problemStatement && (
                             <p className="text-sm text-gray-300 mt-1">{problemStatement}</p>
                         )}
@@ -265,8 +291,10 @@ function ModuleDetail() {
                                     <ul className="mt-2 bg-gray-700 p-2 rounded text-xs text-gray-200">
                                         {sampleTestCases.map((tc, i) => (
                                             <li key={i} className="mb-1">
-                                                <span className="font-semibold">Input:</span> {tc.input} |
-                                                <span className="font-semibold"> Output:</span> {tc.output}
+                                                <span className="font-semibold">Input:</span>{" "}
+                                                {tc.input} |{" "}
+                                                <span className="font-semibold">Output:</span>{" "}
+                                                {tc.output}
                                             </li>
                                         ))}
                                     </ul>
@@ -274,6 +302,7 @@ function ModuleDetail() {
                             </div>
                         )}
 
+                        {/* Code Editor */}
                         <div className="mt-4">
                             <label className=" text-sm text-gray-400 mb-1 flex items-center">
                                 <CodeBracketIcon className="w-4 h-4 mr-1" />
@@ -301,7 +330,9 @@ function ModuleDetail() {
                                 >
                                     {runLoading ? "Running..." : "Run Code"}
                                 </button>
-                                <span className="text-xs text-gray-400">Test with sample cases</span>
+                                <span className="text-xs text-gray-400">
+                                    Test with sample cases
+                                </span>
                             </div>
 
                             {outputValue && (
@@ -324,13 +355,18 @@ function ModuleDetail() {
                 );
             })}
 
-
+            {/* Submission Section */}
             <div className="mt-4">
+                {/* We still display text feedback as well, though toastify is also used */}
                 {submissionSuccess && (
                     <p className="text-green-400 text-sm mb-2">{submissionSuccess}</p>
                 )}
                 {submissionError && (
-                    <p className="text-red-400 text-sm mb-2">{submissionError?.message}</p>
+                    <p className="text-red-400 text-sm mb-2">
+                        {typeof submissionError === "string"
+                            ? submissionError
+                            : submissionError?.message}
+                    </p>
                 )}
 
                 {isWithinTime && module.questions?.length !== 0 && (
@@ -343,7 +379,6 @@ function ModuleDetail() {
                     </button>
                 )}
             </div>
-
         </div>
     );
 }

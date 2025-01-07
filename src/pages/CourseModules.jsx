@@ -45,7 +45,7 @@ function CourseModules() {
     return (
         <div className="min-h-screen bg-gray-900 text-gray-200 font-mono">
             {/* Course Header */}
-            <div className="bg-green-700 px-6 py-4">
+            <div className="pt-20 px-6 py-4">
                 {/* <h1 className="text-2xl font-bold">
                     {modules[0]?.course?.name || "Course Name Unavailable"}
                 </h1>
