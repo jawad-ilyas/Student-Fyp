@@ -37,6 +37,7 @@ function ModuleDetail() {
 
     // Local state for solutions
     const [solutions, setSolutions] = useState([]);
+    const [solutionsToPass, setSolutionsToPass] = useState([]);
     const [showTestCases, setShowTestCases] = useState(false);
 
     useEffect(() => {
@@ -55,6 +56,7 @@ function ModuleDetail() {
                 output: "",
             }));
             setSolutions(initial);
+            setSolutionsToPass(initial);
         }
     }, [module]);
 
@@ -128,18 +130,27 @@ function ModuleDetail() {
 
         const languageToUse = "cpp17";
         const codeToRun = solutions[index].code;
-        const testCases = module.questions[index].question.testCases || [];
+        const testCases = module.questions[index].question.sampleTestCases || [];
+        const question = module.questions[index].question.problemStatement
+        const totalMarks = module.questions[index].marks
+        console.log(" module.questions", question)
 
         const resultAction = await dispatch(
-            runCode({ code: codeToRun, language: languageToUse, testCases })
+            runCode({ code: codeToRun, language: languageToUse, testCases, question, totalMarks })
         );
 
         if (runCode.fulfilled.match(resultAction)) {
-            const { output, passCount, totalCount } = resultAction.payload;
+            const { output, passCount, totalCount, score, totalMarks } = resultAction.payload;
             const newOutput = `Output: ${output}\nPassed ${passCount}/${totalCount} testcases`;
+            const newOutputWithMarks = `Output: ${output}\nPassed ${passCount}/${totalCount} testcases\n AI driven score is: ${score}/${totalMarks} `;
             setSolutions((prev) => {
                 const copy = [...prev];
                 copy[index].output = newOutput;
+                return copy;
+            });
+            setSolutionsToPass ((prev) => {
+                const copy = [...prev];
+                copy[index].output = newOutputWithMarks;
                 return copy;
             });
         } else {
@@ -156,7 +167,7 @@ function ModuleDetail() {
         const courseId = module?.course;
         const teacherId = module?.teacher?._id;
 
-        const updatedSolutions = solutions.map((solution, index) => ({
+        const updatedSolutions = solutionsToPass.map((solution, index) => ({
             ...solution,
             marks: module.questions[index].marks, // Include marks for each question
         }));
