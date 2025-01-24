@@ -50,7 +50,7 @@ const studentAuthSlice = createSlice({
                 state.studentInfo = action.payload; // e.g. { _id, name, email, token, role: "student" }
                 localStorage.setItem("studentInfo", JSON.stringify(action.payload));
 
-            })
+            })                                                                                                                                           
             .addCase(studentLogin.rejected, (state, action) => {
                 state.loading = false;
                 // action.payload might contain an error message
