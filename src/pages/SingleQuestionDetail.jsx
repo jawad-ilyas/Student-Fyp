@@ -36,7 +36,7 @@ function SingleQuestionDetail() {
             const testCases = singleQuestion?.sampleTestCases || [];
 
             const resultAction = await dispatch(
-                runCode({ code, language, testCases })
+                runCode({ code, language, testCases, questionId })
             );
 
             if (runCode.fulfilled.match(resultAction)) {
