@@ -127,16 +127,17 @@ function ModuleDetail() {
             alert("Module is locked or closed.");
             return;
         }
-
+        console.log("module.questions[index].question ", module.questions[index].question?._id)
         const languageToUse = "cpp17";
         const codeToRun = solutions[index].code;
         const testCases = module.questions[index].question.sampleTestCases || [];
         const question = module.questions[index].question.problemStatement
         const totalMarks = module.questions[index].marks
         console.log(" module.questions", question)
+        const questionId = module.questions[index]._id;
 
         const resultAction = await dispatch(
-            runCode({ code: codeToRun, language: languageToUse, testCases, question, totalMarks })
+            runCode({ code: codeToRun, language: languageToUse, testCases, questionId, question, totalMarks })
         );
 
         if (runCode.fulfilled.match(resultAction)) {
@@ -148,7 +149,7 @@ function ModuleDetail() {
                 copy[index].output = newOutput;
                 return copy;
             });
-            setSolutionsToPass ((prev) => {
+            setSolutionsToPass((prev) => {
                 const copy = [...prev];
                 copy[index].output = newOutputWithMarks;
                 return copy;
