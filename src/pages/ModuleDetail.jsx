@@ -167,7 +167,8 @@ function ModuleDetail() {
             console.log('type of resultAction.payload:', typeof resultAction.payload);
 
 
-            const newOutput = `Passed ${passCount}/${totalCount} testcases`;
+            // const newOutput = `Output: ${output}\nPassed ${passCount}/${totalCount} testcases`;
+            const newOutput = `\nPassed ${passCount}/${totalCount} testcases`;
             const newOutputWithMarks = `Output: ${output}\nPassed ${passCount}/${totalCount} testcases\n AI driven score is: ${score}/${totalMarks} `;
             setSolutions((prev) => {
                 const copy = [...prev];
@@ -182,8 +183,12 @@ function ModuleDetail() {
                 return copy;
             });
         } else {
+            console.log("statusAfterRunning : ", statusAfterRunning)
+
             toast.error("Error running code.");
         }
+
+        console.log("statusAfterRunning : ", statusAfterRunning)
     };
 
     const handleSubmitAll = () => {
