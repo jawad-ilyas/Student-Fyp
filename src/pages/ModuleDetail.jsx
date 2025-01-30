@@ -169,7 +169,7 @@ function ModuleDetail() {
 
             // const newOutput = `Output: ${output}\nPassed ${passCount}/${totalCount} testcases`;
             const newOutput = `\nPassed ${passCount}/${totalCount} testcases`;
-            const newOutputWithMarks = `Output: ${output}\nPassed ${passCount}/${totalCount} testcases\n AI driven score is: ${score}/${totalMarks} `;
+            const newOutputWithMarks = `Output: ${output}\nPassed ${passCount}/${totalCount} testcases\n `;
             setSolutions((prev) => {
                 const copy = [...prev];
                 copy[index].output = newOutput;
