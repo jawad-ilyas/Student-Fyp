@@ -33,7 +33,7 @@ function ModuleDetail() {
         success: submissionSuccess,
     } = useSelector((state) => state.submission);
 
-    const { runLoading } = useSelector((state) => state.compiler);
+    const { runLoading, runError, statusAfterRunning } = useSelector((state) => state.compiler);
 
     // Local state for solutions
     const [solutions, setSolutions] = useState([]);
@@ -135,14 +135,39 @@ function ModuleDetail() {
         const question = module.questions[index].question.problemStatement
         const totalMarks = module.questions[index].marks
         console.log(" module.questions", question)
-        const questionId = module.questions[index]._id;
+        const questionId = module.questions[index].question?._id;
+
         const resultAction = await dispatch(
             runCode({ code: codeToRun, language: languageToUse, testCases, questionId, question, totalMarks })
         );
 
         if (runCode.fulfilled.match(resultAction)) {
+            console.log("status after running the code ")
             const { output, passCount, totalCount, score, totalMarks } = resultAction.payload;
-            const newOutput = `Output: ${output}\nPassed ${passCount}/${totalCount} testcases`;
+
+
+            // Print individual variables and their types
+            console.log('output:', output);
+            console.log('type of output:', typeof output);
+
+            console.log('passCount:', passCount);
+            console.log('type of passCount:', typeof passCount);
+
+            console.log('totalCount:', totalCount);
+            console.log('type of totalCount:', typeof totalCount);
+
+            console.log('score:', score);
+            console.log('type of score:', typeof score);
+
+            console.log('totalMarks:', totalMarks);
+            console.log('type of totalMarks:', typeof totalMarks);
+
+            // Print the entire payload
+            console.log('resultAction.payload:', JSON.stringify(resultAction.payload, null, 2));
+            console.log('type of resultAction.payload:', typeof resultAction.payload);
+
+
+            const newOutput = `Passed ${passCount}/${totalCount} testcases`;
             const newOutputWithMarks = `Output: ${output}\nPassed ${passCount}/${totalCount} testcases\n AI driven score is: ${score}/${totalMarks} `;
             setSolutions((prev) => {
                 const copy = [...prev];

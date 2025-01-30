@@ -17,7 +17,7 @@ export const runCode = createAsyncThunk(
                 { code, language, testCases, questionId, question, totalMarks },
                 config
             );
-            console.log("response is", response)
+            console.log("response is", response?.data)
             // The shape of response.data might now have e.g. { output, passCount, totalCount, compile_output, etc. }
             return response.data.data;
         } catch (error) {
@@ -31,6 +31,7 @@ const compilerSlice = createSlice({
     initialState: {
         runLoading: false,
         runError: null,
+        statusAfterRunning: [],
     },
     reducers: {},
     extraReducers: (builder) => {
@@ -42,6 +43,7 @@ const compilerSlice = createSlice({
             .addCase(runCode.fulfilled, (state, action) => {
                 state.runLoading = false;
                 state.runError = null;
+                state.statusAfterRunning = action.payload;
             })
             .addCase(runCode.rejected, (state, action) => {
                 state.runLoading = false;
