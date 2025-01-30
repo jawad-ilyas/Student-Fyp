@@ -54,6 +54,7 @@ function ModuleDetail() {
                 code: "",
                 text: "",
                 output: "",
+                score: 0,
             }));
             setSolutions(initial);
             setSolutionsToPass(initial);
@@ -135,7 +136,6 @@ function ModuleDetail() {
         const totalMarks = module.questions[index].marks
         console.log(" module.questions", question)
         const questionId = module.questions[index]._id;
-
         const resultAction = await dispatch(
             runCode({ code: codeToRun, language: languageToUse, testCases, questionId, question, totalMarks })
         );
@@ -152,6 +152,8 @@ function ModuleDetail() {
             setSolutionsToPass((prev) => {
                 const copy = [...prev];
                 copy[index].output = newOutputWithMarks;
+                copy[index].score = score;
+                copy[index].code = codeToRun;
                 return copy;
             });
         } else {
